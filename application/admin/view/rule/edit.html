@@ -1,0 +1,31 @@
+{extend name="public/base" /}
+{block name="body"}
+<div class="main-div">
+    <form action="" method="post" name="theForm" enctype="multipart/form-data">
+        <table width="100%" id="general-table">
+            <tr>
+                <td class="label">分类名称:</td>
+                <td>
+                    <input type='text' name='cate_name' value="{$info.cate_name}" /> <font color="red">*</font>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">上级分类:</td>
+                <td>
+                    <select name="parent_id">
+                        <option value="0">顶级分类</option>
+                        <!-- 判断条件 当前修改分类的parent_id等于循环的分类的ID -->
+                        {volist name="category" id="vo"}
+                        <option value="{$vo.id}" {eq name="$info.parent_id" value="$vo.id" }selected="selected"{/eq}>{$vo.lev|str_repeat='&nbsp;', ###}{$vo.cate_name}</option>
+                        {/volist}
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div class="button-div">
+            <input type="submit" value=" 确定 " />
+            <input type="reset" value=" 重置 " />
+        </div>
+    </form>
+</div>
+{/block}

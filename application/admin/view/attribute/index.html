@@ -1,0 +1,46 @@
+{extend name="public/base" /}
+
+{block name="body"}
+<div class="list-div" id="listDiv">
+    <table cellpadding="3" cellspacing="1">
+        <tr>
+            <th>编号</th>
+            <th>属性名称</th>
+            <th>所属类型</th>
+            <th>本身类型</th>
+            <th>属性值录入方式</th>
+            <th>默认值</th>
+            <th>操作</th>
+        </tr>
+        {volist name="data" id="vo"}
+        <tr>
+            <td align="center">{$vo.id}</td>
+            <td align="center">{$vo.attr_name}</td>
+            <td align="center">{$vo.type_name}</td>
+            <td align="center">{eq name="$vo.attr_type" value="1"}唯一属性{else/}单选属性{/eq}</td>
+            <td align="center">{eq name="$vo.attr_input_type" value="1"}input输入{else/}select选择{/eq}</td>
+            <td align="center">{$vo.attr_values}</td>
+           
+            <td align="center">
+            <a href="{:url('edit','id='.$vo['id'])}" title="编辑">编辑</a>
+            <a href="{:url('remove','id='.$vo['id'])}" onclick="" title="回收站">删除</a></td>
+        </tr>
+        {/volist}
+    </table>
+    <style type="text/css">
+        .pagination{ width: 1000px; text-align: left; }
+        .pagination li{text-align: center; margin: 5px; float: left;width:40px; list-style: none}
+
+    </style>
+    <!-- 分页开始 -->
+    <table id="page-table" cellspacing="0">
+        <tr>
+            <td width="80%">&nbsp;</td>
+            <td align="center" nowrap="true">
+                {$data->render()}
+            </td>
+        </tr>
+    </table>
+<!-- 分页结束 -->
+</div>
+{/block}

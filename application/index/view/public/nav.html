@@ -1,0 +1,23 @@
+<!-- 顶部导航 start -->
+<div class="topnav">
+    <div class="topnav_bd w1210 bc">
+        <div class="topnav_left">
+            
+        </div>
+        <div class="topnav_right fr">
+            <ul>
+                {empty name="$Think.session.user_info"}
+                <li>您好，欢迎来到京西！[<a href="{:url('user/login')}">登录</a>] [<a href="{:url('user/regist')}">免费注册</a>] </li>
+                {else /}
+                <li class="line">|</li>
+                <li>{$Think.session.user_info.username}你好</li>
+                <li class="line">|</li>
+                <li>[<a href="{:url('user/logout')}">退出登录</a>]</li>
+                {/empty}
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- 顶部导航 end -->
+
+<div style="clear:both;"></div>

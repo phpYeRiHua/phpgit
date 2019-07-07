@@ -1,0 +1,217 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>ECSHOP 管理中心 - 添加新商品 </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="__ADMIN__Styles/general.css" rel="stylesheet" type="text/css" />
+    <link href="__ADMIN__Styles/main.css" rel="stylesheet" type="text/css" />
+    <style>
+        #edui1_iframeholder {
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        <span class="action-span"><a href="">商品列表</a>
+        </span>
+        <span class="action-span1"><a href="">ECSHOP 管理中心</a></span>
+        <span id="search_id" class="action-span1"> - 添加新商品 </span>
+        <div style="clear:both"></div>
+    </h1>
+
+    <div class="tab-div">
+        <div id="tabbar-div">
+            <p>
+                <span class="tab-front">通用信息</span>
+                <span class="tab-front">详细描述</span>
+                <span class="tab-front">商品属性</span>
+                <span class="tab-front">商品相册</span>
+            </p>
+        </div>
+        <div id="tabbody-div">
+            <form enctype="multipart/form-data" action="" method="post">
+                {:token()}
+                <table width="90%" class="table" align="center">
+                    <tr>
+                        <td class="label">商品名称：</td>
+                        <td><input type="text" name="goods_name" value="{:$goods_info.goods_name}" size="30" />
+                            <span class="require-field">*</span></td>
+                    </tr>
+                    <tr>
+                        <td class="label">商品货号： </td>
+                        <td>
+                            <input type="text" disabled="disabled" name="goods_sn" value="{:$goods_info.goods_sn}"
+                                size="20" />
+                            <span id="goods_sn_notice"></span><br />
+                            <span class="notice-span" id="noticeGoodsSN">如果您不输入商品货号，系统将自动生成一个唯一的货号。</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">商品分类：</td>
+                        <td>
+                            <select name="cate_id">
+                                <option value="0">请选择...</option>
+                                {volist name="category" id="vo"}
+                                <option value="{$vo.id}" {eq name="$vo.id" value="$goods_info['cate_id']"
+                                    }selected="selected" {/eq}>{$vo.lev|str_repeat='&nbsp;&nbsp;',###}{$vo.cate_name}
+                                    </option> {/volist} </select> <span class="require-field">*</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="label">本店售价：</td>
+                        <td>
+                            <input type="text" name="shop_price" value="{:$goods_info.shop_price}" size="20" />
+                            <span class="require-field">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">加入推荐：</td>
+                        <td>
+                            <input type="checkbox" name="is_hot" value="1" {eq name="$goods_info.is_hot" value="1"
+                                }checked="checked" {/eq}/> 热卖 <input type="checkbox" name="is_new" value="1" {eq
+                                name="$goods_info.is_new" value="1" }checked="checked" {/eq}/> 新品 <input type="checkbox"
+                                name="is_rec" value="1" {eq name="$goods_info.is_rec" value="1" }checked="checked"
+                                {/eq}/> 推荐 </td> </tr> <tr>
+                        <td class="label">市场售价：</td>
+                        <td>
+                            <input type="text" name="market_price" value="{:$goods_info.market_price}" size="20" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="label">商品图片：</td>
+                        <td>
+                            <input type="file" name="goods_img" size="35" />
+                        </td>
+                    </tr>
+
+                </table>
+                <table width="90%" class="table" align="center" style="display: none">
+                    <tr>
+                        <td class="label">商品描述：</td>
+                        <td>
+                            <!-- 加载编辑器的容器 -->
+                            <script id="container" name="goods_body" type="text/plain"></script>
+                            <!-- 配置文件 -->
+                            <script type="text/javascript" src="__STATIC__/ueditor/ueditor.config.js"></script>
+                            <!-- 编辑器源码文件 -->
+                            <script type="text/javascript" src="__STATIC__/ueditor/ueditor.all.js"></script>
+                            <!-- 实例化编辑器 -->
+                            <script type="text/javascript">
+                                var ue = UE.getEditor('container');
+                            </script>
+                        </td>
+                    </tr>
+                </table>
+                <table width="90%" class="table" align="center" style="display: none">
+                    <tr>
+                        <td class="label">商品类型：</td>
+                        <td>
+                            <select name="type_id" id="type_id">
+                                <option value="0">选择类型</option>
+                                {volist name="type" id="vo"}
+                                <option value="{$vo.id}" {eq name="goods_info.type_id" value="$vo.id"
+                                    }selected="selected" {/eq}>{$vo.type_name} </option> {/volist} </select> 
+                        </td> 
+                    </tr>
+                    <tr>
+                    <td colspan="2" id="showAttr">
+                        <table width="90%" align="center">
+                        {volist name="attrs" id="v3"}
+                        {volist name="v3" id="vo"}
+                        <tr>
+                            <td class="label">{eq name="$vo.attr_type" value="2"}<a href="javascript:;" onclick="cloneThis(this)">{eq name="$i" value="1"}[+]{else /}[-]{/eq}</a>{/eq}{$vo.attr_name}：</td>
+                            <td>
+                            <input type="hidden" name="attr_ids[]" value="{$vo.attr_id}">
+                               {eq name="$vo.attr_input_type" value="1"}
+                                <input type="text" name="attr_values[]" value="{$vo.attr_value}">
+                               {else /}
+                               <select name="attr_values[]">
+                                    {volist name="vo.attr_values" id="v"}
+                                    <option {eq name="$vo.attr_value" value="$v" }selected="selected"{/eq}>{$v}</option>
+                                    {/volist}
+                               </select>
+                               {/eq}
+                            </td>
+                        </tr>
+                        {/volist}
+                        {/volist}
+                    </table>
+
+                    </td>
+                </tr>
+                </table>
+                <table width="90%" class="table" align="center" style="display: none">
+                    <tr>
+                        <td class="label"></td>
+                        <td>
+                            <input type="button" value="增加相片" id="addBtn">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">上传相片：</td>
+                        <td>
+                            <input type="file" name="imgs[]">
+                        </td>
+                    </tr>
+                </table>
+                <div class="button-div">
+                    <input type="submit" value=" 确定 " class="button" />
+                    <input type="reset" value=" 重置 " class="button" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="footer">
+        共执行 9 个查询，用时 0.025161 秒，Gzip 已禁用，内存占用 3.258 MB<br />
+        版权所有 &copy; 2005-2012 上海商派网络科技有限公司，并保留所有权利。</div>
+</body>
+
+</html>
+<script type="text/javascript" src="__ADMIN__/Js/jquery-1.8.3.min.js"></script>
+<script>
+    $('#tabbar-div span').click(function () {
+        $('.table').hide();
+        var index = $(this).index();
+        $('.table').eq(index).show();
+    })
+    $('#type_id').change(function () {
+        // 获取所需要的参数
+        var type_id = $(this).val();
+        if (type_id == 0) {
+            $('#showAttr').html('选择类型');
+            return false;
+        }
+        $.ajax({
+            url: "{:url('showAttr')}",
+            type: 'post',
+            data: {
+                type_id: type_id
+            },
+            success: function (res) {
+                $('#showAttr').html(res);
+            }
+        })
+    })
+
+    function cloneThis(obj) {
+        if ($(obj).html() == '[+]') {
+            // 复制新的tr标签
+            var newTr = $(obj).parent().parent().clone();
+            newTr.find('a').html('[-]');
+            $(obj).parent().parent().after(newTr);
+        } else {
+            $(obj).parent().parent().remove();
+        }
+    }
+    $('#addBtn').click(function(){
+        var newTr=$(this).parent().parent().next().clone();
+        $(this).parent().parent().parent().append(newTr);
+    })
+</script>
